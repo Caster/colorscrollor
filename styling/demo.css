@@ -20,6 +20,8 @@ body {
 }
 
 .controls > button {
+    display: inline-block;
+    vertical-align: middle;
     height: 4em;
     width: 4em;
     padding: 0px;
