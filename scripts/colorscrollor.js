@@ -25,11 +25,15 @@
             self = this;
 
         // constructor
-        container.style.width = n + 'em';
         self.playing = false;
 
 
         self._addStrip = function(n, callback) {
+            // adjust container width?
+            if (container.children.length === 0) {
+                container.style.width = n + 'em';
+            }
+            // add actual strip
             for (let i = 0; i <= n; ++i) {
                 var b = w.document.createElement('span');
                 b.classList.add('block');
