@@ -1,23 +1,28 @@
 
-(function(window) {
+(function(w) {
 
-    var cs = new window.ColorScrollor(
-            window.document.getElementsByClassName('scrollor').item(0)
+    var cs = new w.ColorScrollor(
+            w.document.getElementsByClassName('scrollor').item(0)
         ),
         // buttons
-        add = window.document.getElementById('cntrl-add'),
-        rnd = window.document.getElementById('cntrl-rnd'),
-        ply = window.document.getElementById('cntrl-ply');
+        add = w.document.getElementById('cntrl-add'),
+        rnd = w.document.getElementById('cntrl-rnd'),
+        ply = w.document.getElementById('cntrl-ply'),
+        del = w.document.getElementById('cntrl-del');
 
-    // for testing TODO remove
+    // initialize with 10 random rows to have some content
     for (let i = 0; i < 10; ++i) {
         cs.addRandom();
     }
 
-    // add randomly generated list
-    rnd.addEventListener('click', function() {
-        cs.addRandom();
+    // add specified list of blocks
+    add.addEventListener('click', function() {
+        cs.addFromList(w.prompt('Please provide categories, separated by ' +
+            'commas. Example: "3,2,5,1,1,0,4".'));
     });
+
+    // add randomly generated list
+    rnd.addEventListener('click', cs.addRandom);
 
     // play/pause the scrolling
     ply.addEventListener('click', function() {
@@ -30,5 +35,8 @@
             cs.play();
         }
     });
+
+    // reset/refresh/erase (delete all strips)
+    del.addEventListener('click', cs.reset);
 
 }(window));
