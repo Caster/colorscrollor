@@ -16,16 +16,21 @@ body {
 .controls {
     position: fixed;
     top: 1em;
-    left: calc(50% - 4em - 2px);
+    left: calc(50% - 8em - 7.5px);
 }
 
 .controls > button {
     display: inline-block;
     vertical-align: middle;
+    float: left;
     height: 4em;
     width: 4em;
     padding: 0px;
+    margin: 0 5px 0 0;
     text-align: center;
+}
+.controls > button:last-child {
+    margin-right: 0;
 }
 
 .stacked {
