@@ -20,7 +20,6 @@
                 [247, 251, 255], // light
                 [  8,  48, 107] // dark
             ],
-            newLi = null,
             playInterval = null,
             self = this;
 
@@ -29,6 +28,7 @@
 
 
         self._addStrip = function(n, callback) {
+            var newLi = w.document.createElement('li');
             // adjust container width?
             if (container.children.length === 0) {
                 container.style.width = n + 'em';
@@ -46,20 +46,11 @@
                 }
                 newLi.appendChild(b);
             }
-        };
-
-        self._newLi = function() {
-            newLi = w.document.createElement('li');
-        };
-
-        self._newLiDone = function() {
             container.appendChild(newLi);
-            newLi = null;
         };
 
 
         self.addFromList = function(categories) {
-            self._newLi();
             var lines = categories.split('\n');
             for (let l = lines.length, i = 0; i < l; ++i) {
                 var blocks = lines[i].split(',');
@@ -73,11 +64,9 @@
                     );
                 });
             }
-            self._newLiDone();
         };
 
         self.addRandom = function() {
-            self._newLi();
             self._addStrip(n, function(i) {
                 var r = Math.floor(Math.random() * c);
                 return rgbToHex(
@@ -86,7 +75,6 @@
                     colors[0][2] + (colors[1][2] - colors[0][2]) / (c - 1) * r
                 );
             });
-            self._newLiDone();
         };
 
         self.play = function() {

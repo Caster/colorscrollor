@@ -17,8 +17,25 @@
 
     // add specified list of blocks
     add.addEventListener('click', function() {
-        cs.addFromList(w.prompt('Please provide categories, separated by ' +
-            'commas. Example: "3,2,5,1,1,0,4".'));
+        var modal = w.document.createElement('textarea'),
+            modalBg = w.document.createElement('div'),
+            button = w.document.createElement('button');
+        modal.classList.add('modal');
+        modal.placeholder = 'Please provide categories, separated by ' +
+            'commas. Example: "3,2,5,1,1,0,4". You can add more ' +
+            'than one strip by putting every strip on a new line.';
+        modal.style.minWidth = '30em';
+        modal.style.minHeight = '8em';
+        modalBg.classList.add('modal-bg');
+        button.innerHTML = 'Add strip(s)';
+
+        modalBg.appendChild(modal);
+        modalBg.appendChild(button);
+        w.document.body.appendChild(modalBg);
+        button.addEventListener('click', function() {
+            cs.addFromList(modal.value);
+            w.document.body.removeChild(modalBg);
+        });
     });
 
     // add randomly generated list
