@@ -20,11 +20,25 @@
                 [247, 251, 255], // light
                 [  8,  48, 107] // dark
             ],
-            playInterval = null,
             self = this;
 
         // constructor
         self.playing = false;
+        container.addEventListener('transitionend', function(e) {
+            // hide element when it was moved out of view
+            e.originalTarget.style.visibility = 'hidden';
+
+            // only respond to the event from the last child, to make sure we
+            // respond precisely once per shift, instead of once per row
+            if (e.originalTarget.parentNode !== container.lastChild) {
+                return;
+            }
+
+            // continue shifting if the animation was not paused
+            if (self.playing) {
+                self.shift();
+            }
+        });
 
 
         self._addStrip = function(n, callback) {
@@ -41,7 +55,7 @@
                     b.style.backgroundColor = callback(i - 1);
                 } else {
                     // extra dummy block for playing animation
-                    b.style.backgroundColor = 'red';
+                    b.style.visibility = 'hidden';
                     b.style.marginLeft = '-1em';
                 }
                 newLi.appendChild(b);
@@ -81,14 +95,6 @@
             if (self.playing)  return;
             self.playing = true;
             self.shift();
-            playInterval = w.setInterval(function() {
-                if (self.playing) {
-                    self.shift();
-                } else {
-                    w.clearInterval(playInterval);
-                    playInterval = null;
-                }
-            }, 400);
         };
 
         self.pause = function() {
@@ -106,12 +112,14 @@
             for (let i = 0; i < lis.length; ++i) {
                 li = lis.item(i);
                 // copy color of first block to dummy
-                li.children.item(0).style.backgroundColor =
+                li.firstChild.style.backgroundColor =
                     li.children.item(1).style.backgroundColor;
-                li.children.item(0).style.marginLeft = '';
-                li.appendChild(li.children.item(0)); // move dummy to back
+                li.firstChild.style.marginLeft = '';
+                li.appendChild(li.firstChild); // move dummy to back
+                // update visibility
+                li.lastChild.style.visibility = '';
                 // do actual shift
-                li.children.item(0).style.marginLeft = '-1em';
+                li.firstChild.style.marginLeft = '-1em';
             }
         };
 

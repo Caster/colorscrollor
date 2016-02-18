@@ -4,6 +4,7 @@
     var cs = new w.ColorScrollor(
             w.document.getElementsByClassName('scrollor').item(0)
         ),
+        $scrollor = $('.scrollor'),
         // buttons
         add = w.document.getElementById('cntrl-add'),
         rnd = w.document.getElementById('cntrl-rnd'),
@@ -43,6 +44,10 @@
 
     // play/pause the scrolling
     ply.addEventListener('click', function() {
+        // disable sorting while scrollor is playing (note that cs.playing is
+        // about to be inverted, hence the seemingly inverted order)
+        $scrollor.sortable(cs.playing ? 'enable' : 'disable');
+
         var plyIcon = ply.children.item(0);
         plyIcon.classList.toggle('fa-play');
         plyIcon.classList.toggle('fa-pause');
@@ -55,5 +60,8 @@
 
     // reset/refresh/erase (delete all strips)
     del.addEventListener('click', cs.reset);
+
+    // make strips sortable
+    $scrollor.sortable();
 
 }(window));
