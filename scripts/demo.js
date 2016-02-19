@@ -1,5 +1,5 @@
-
 (function(w) {
+    'use strict';
 
     var cs = new w.ColorScrollor(
             w.document.getElementsByClassName('scrollor').item(0)

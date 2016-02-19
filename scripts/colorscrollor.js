@@ -1,4 +1,5 @@
 (function(w) {
+    'use strict';
 
     function pad(s, l) {
         if (typeof(l) === 'undefined')  l = 2;
@@ -20,17 +21,19 @@
                 [247, 251, 255], // light
                 [  8,  48, 107] // dark
             ],
+            rows = 0,
+            rowsSeen = 0, // for transitionend event listener
             self = this;
 
         // constructor
         self.playing = false;
         container.addEventListener('transitionend', function(e) {
             // hide element when it was moved out of view
-            e.originalTarget.style.visibility = 'hidden';
+            e.target.style.visibility = 'hidden';
 
             // only respond to the event from the last child, to make sure we
             // respond precisely once per shift, instead of once per row
-            if (e.originalTarget.parentNode !== container.lastChild) {
+            if (++rowsSeen < rows) {
                 return;
             }
 
@@ -61,10 +64,12 @@
                 newLi.appendChild(b);
             }
             container.appendChild(newLi);
+            rows++;
         };
 
 
         self.addFromList = function(categories) {
+            if (self.playing)  return;
             var lines = categories.split('\n');
             for (let l = lines.length, i = 0; i < l; ++i) {
                 var blocks = lines[i].split(',');
@@ -81,6 +86,7 @@
         };
 
         self.addRandom = function() {
+            if (self.playing)  return;
             self._addStrip(n, function(i) {
                 var r = Math.floor(Math.random() * c);
                 return rgbToHex(
@@ -105,9 +111,11 @@
             while (container.lastChild) {
                 container.removeChild(container.lastChild);
             }
+            rows = 0;
         };
 
         self.shift = function() {
+            rowsSeen = 0;
             var lis = container.children, li;
             for (let i = 0; i < lis.length; ++i) {
                 li = lis.item(i);
